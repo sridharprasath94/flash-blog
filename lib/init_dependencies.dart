@@ -21,6 +21,7 @@ import 'package:flash_blog/features/blog/domain/usecases/upload_blog.dart';
 import 'package:flash_blog/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -34,7 +35,9 @@ Future<void> initDependencies() async {
 }
 
 Future<void> _initHive() async {
-  Hive.init(Directory.current.path);
+  final dir = await getApplicationDocumentsDirectory();
+  Hive.init(dir.path);
+
   serviceLocator.registerSingletonAsync<Box>(
         () async => await Hive.openBox('blogs'),
     instanceName: 'blogsBox',
